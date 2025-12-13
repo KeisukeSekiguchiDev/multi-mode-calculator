@@ -12,6 +12,9 @@ docs/review/
 docs/analysis/
 docs/presentation/
 
+# === AI開発ガイド（内部用） ===
+.claude/
+
 # === 依存パッケージ ===
 node_modules/
 packages/
