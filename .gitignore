@@ -46,6 +46,17 @@ playwright-report/
 *.trx
 TestResults/
 
+# === テスト関連（内部成果物） ===
+tests/*-test-runner.html
+tests/*-test.html
+tests/*-manual-test.html
+tests/test-runner.html
+tests/T-*-test-results.md
+tests/*.test.md
+tests/run-*.js
+tests/test-*.js
+tests/*.test.js
+
 # === ログ・キャッシュ ===
 *.log
 .cache/
