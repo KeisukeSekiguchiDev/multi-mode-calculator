@@ -283,14 +283,16 @@ Calculator/
 │   │   └── keyboard.js              # キーボード入力処理
 │   └── themes/                      # テーマ別CSS（今後拡張用）
 ├── tests/
-│   ├── playwright/
+│   ├── playwright/                  # Playwright E2Eテスト
 │   │   ├── ui.spec.js               # UI全般のテスト
 │   │   ├── programmer.spec.js       # プログラマ電卓のテスト
 │   │   ├── history.spec.js          # 履歴機能のテスト
 │   │   └── theme-modal.spec.js      # テーマモーダルのテスト
-│   └── e2e/
-│       ├── themes.spec.js           # テーマ機能のE2Eテスト
-│       └── bitwise.spec.js          # ビット演算のE2Eテスト
+│   ├── e2e/                         # E2Eテスト
+│   │   ├── themes.spec.js           # テーマ機能のテスト
+│   │   └── bitwise.spec.js          # ビット演算のテスト
+│   └── unit/                        # ユニットテスト
+│       └── themes.test.js           # テーマ機能のユニットテスト
 ├── playwright.config.js             # Playwright設定ファイル
 └── package.json                     # プロジェクト設定・依存パッケージ
 
@@ -385,7 +387,8 @@ npx playwright test --coverage
 | tests/playwright/theme-modal.spec.js | テーマモーダル | 10+ | 実装済・全パス |
 | tests/e2e/themes.spec.js | テーマ機能（E2E） | 15+ | 実装済・全パス |
 | tests/e2e/bitwise.spec.js | ビット演算（E2E） | 10+ | 実装済・全パス |
-| **合計** | | **80+** | **全パス** |
+| tests/unit/themes.test.js | テーマ機能（ユニット） | 5+ | 実装済・全パス |
+| **合計** | | **85+** | **全パス** |
 
 ### テスト対象機能
 
