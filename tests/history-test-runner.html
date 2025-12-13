@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History Module Tests</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 3px solid #4CAF50;
+      padding-bottom: 10px;
+    }
+    .test-suite {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .test-suite h2 {
+      color: #555;
+      margin-top: 0;
+    }
+    .test-case {
+      padding: 10px;
+      margin: 5px 0;
+      border-left: 4px solid #ddd;
+      background-color: #f9f9f9;
+    }
+    .test-case.pass {
+      border-left-color: #4CAF50;
+      background-color: #e8f5e9;
+    }
+    .test-case.fail {
+      border-left-color: #f44336;
+      background-color: #ffebee;
+    }
+    .test-case.skip {
+      border-left-color: #FFC107;
+      background-color: #fff3e0;
+    }
+    .test-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .test-error {
+      color: #d32f2f;
+      font-family: monospace;
+      font-size: 12px;
+      margin-top: 5px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 4px;
+      white-space: pre-wrap;
+    }
+    .summary {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .summary h2 {
+      margin-top: 0;
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin-top: 15px;
+    }
+    .stat {
+      flex: 1;
+      padding: 15px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .stat.total { background-color: #e3f2fd; }
+    .stat.pass { background-color: #e8f5e9; }
+    .stat.fail { background-color: #ffebee; }
+    .stat.skip { background-color: #fff3e0; }
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>History Module Tests</h1>
+  <div id="test-results"></div>
+  <div class="summary" id="summary"></div>
+
+  <!-- Load the module being tested -->
+  <script src="../src/js/history.js"></script>
+
+  <!-- Simple test framework -->
+  <script>
+    const TestRunner = {
+      suites: [],
+      currentSuite: null,
+      results: { total: 0, pass: 0, fail: 0, skip: 0 },
+
+      describe(name, fn) {
+        const suite = { name, tests: [] };
+        this.suites.push(suite);
+        this.currentSuite = suite;
+        fn();
+        this.currentSuite = null;
+      },
+
+      test(name, fn) {
+        if (!this.currentSuite) {
+          throw new Error('test() must be called within describe()');
+        }
+        this.currentSuite.tests.push({ name, fn });
+      },
+
+      beforeEach(fn) {
+        if (!this.currentSuite) {
+          throw new Error('beforeEach() must be called within describe()');
+        }
+        this.currentSuite.beforeEach = fn;
+      },
+
+      afterEach(fn) {
+        if (!this.currentSuite) {
+          throw new Error('afterEach() must be called within describe()');
+        }
+        this.currentSuite.afterEach = fn;
+      },
+
+      async run() {
+        const container = document.getElementById('test-results');
+        container.innerHTML = '';
+
+        for (const suite of this.suites) {
+          const suiteDiv = document.createElement('div');
+          suiteDiv.className = 'test-suite';
+          suiteDiv.innerHTML = `<h2>${suite.name}</h2>`;
+          container.appendChild(suiteDiv);
+
+          for (const test of suite.tests) {
+            this.results.total++;
+            const testDiv = document.createElement('div');
+            testDiv.className = 'test-case';
+
+            try {
+              // Run beforeEach
+              if (suite.beforeEach) {
+                await suite.beforeEach();
+              }
+
+              // Run test
+              await test.fn();
+
+              // Test passed
+              testDiv.classList.add('pass');
+              testDiv.innerHTML = `<div class="test-name">✓ ${test.name}</div>`;
+              this.results.pass++;
+
+              // Run afterEach
+              if (suite.afterEach) {
+                await suite.afterEach();
+              }
+            } catch (error) {
+              // Test failed
+              testDiv.classList.add('fail');
+              testDiv.innerHTML = `
+                <div class="test-name">✗ ${test.name}</div>
+                <div class="test-error">${error.message}\n${error.stack}</div>
+              `;
+              this.results.fail++;
+            }
+
+            suiteDiv.appendChild(testDiv);
+          }
+        }
+
+        this.renderSummary();
+      },
+
+      renderSummary() {
+        const summary = document.getElementById('summary');
+        const passRate = ((this.results.pass / this.results.total) * 100).toFixed(1);
+
+        summary.innerHTML = `
+          <h2>Test Summary</h2>
+          <div class="stats">
+            <div class="stat total">
+              <div class="stat-value">${this.results.total}</div>
+              <div class="stat-label">Total</div>
+            </div>
+            <div class="stat pass">
+              <div class="stat-value">${this.results.pass}</div>
+              <div class="stat-label">Passed</div>
+            </div>
+            <div class="stat fail">
+              <div class="stat-value">${this.results.fail}</div>
+              <div class="stat-label">Failed</div>
+            </div>
+            <div class="stat skip">
+              <div class="stat-value">${this.results.skip}</div>
+              <div class="stat-label">Skipped</div>
+            </div>
+          </div>
+          <p style="margin-top: 15px; font-size: 18px;">
+            Pass Rate: <strong>${passRate}%</strong>
+          </p>
+        `;
+      }
+    };
+
+    // Assertion library
+    const expect = (actual) => {
+      const expectObj = {
+        toBe(expected) {
+          if (actual !== expected) {
+            throw new Error(`Expected ${JSON.stringify(expected)}, but got ${JSON.stringify(actual)}`);
+          }
+        },
+        toEqual(expected) {
+          if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+            throw new Error(`Expected ${JSON.stringify(expected)}, but got ${JSON.stringify(actual)}`);
+          }
+        },
+        toHaveLength(expected) {
+          if (!actual || actual.length !== expected) {
+            throw new Error(`Expected length ${expected}, but got ${actual ? actual.length : 'undefined'}`);
+          }
+        },
+        toBeDefined() {
+          if (actual === undefined) {
+            throw new Error('Expected value to be defined');
+          }
+        },
+        toBeNull() {
+          if (actual !== null) {
+            throw new Error(`Expected null, but got ${JSON.stringify(actual)}`);
+          }
+        },
+        toMatch(pattern) {
+          if (!pattern.test(actual)) {
+            throw new Error(`Expected ${JSON.stringify(actual)} to match ${pattern}`);
+          }
+        },
+        not: {
+          toBeNull() {
+            if (actual === null) {
+              throw new Error('Expected value not to be null');
+            }
+          },
+          toBe(expected) {
+            if (actual === expected) {
+              throw new Error(`Expected not to be ${JSON.stringify(expected)}`);
+            }
+          },
+          toThrow() {
+            // For functions
+            let threw = false;
+            try {
+              if (typeof actual === 'function') {
+                actual();
+              }
+            } catch (e) {
+              threw = true;
+            }
+            if (threw) {
+              throw new Error('Expected function not to throw');
+            }
+          }
+        }
+      };
+
+      return expectObj;
+    };
+
+    const describe = TestRunner.describe.bind(TestRunner);
+    const test = TestRunner.test.bind(TestRunner);
+    const beforeEach = TestRunner.beforeEach.bind(TestRunner);
+    const afterEach = TestRunner.afterEach.bind(TestRunner);
+  </script>
+
+  <!-- Test cases -->
+  <script src="history.test.js"></script>
+
+  <!-- Run tests -->
+  <script>
+    window.addEventListener('load', () => {
+      TestRunner.run();
+    });
+  </script>
+</body>
+</html>

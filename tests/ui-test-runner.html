@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator UI Tests</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .header {
+      background: #2d2d2d;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .test-frame {
+      width: 100%;
+      height: 500px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .console-output {
+      background: #1a1a1a;
+      color: #00ff00;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      max-height: 400px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .summary {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .summary h2 {
+      margin-top: 0;
+    }
+    .stat {
+      display: inline-block;
+      margin-right: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .pass { color: #4caf50; }
+    .fail { color: #f44336; }
+    .total { color: #2196f3; }
+    button {
+      background: #2196f3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background: #1976d2;
+    }
+    .run-btn {
+      background: #4caf50;
+    }
+    .run-btn:hover {
+      background: #388e3c;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Calculator UI Layout Tests</h1>
+    <p>Multi-Mode Calculator - UI Structure Verification</p>
+    <button class="run-btn" onclick="runTests()">テスト実行</button>
+    <button onclick="location.reload()">再読み込み</button>
+  </div>
+
+  <h2>テスト対象画面</h2>
+  <iframe id="testFrame" class="test-frame" src="../src/index.html"></iframe>
+
+  <div class="summary" id="summary">
+    <h2>テスト結果</h2>
+    <div id="stats">テスト実行待ち...</div>
+  </div>
+
+  <h2>コンソール出力</h2>
+  <div class="console-output" id="console"></div>
+
+  <script>
+    const consoleDiv = document.getElementById('console');
+    const statsDiv = document.getElementById('stats');
+
+    function log(message, type = 'info') {
+      const colors = {
+        info: '#00ff00',
+        error: '#ff6b6b',
+        warn: '#ffcc00'
+      };
+      consoleDiv.innerHTML += `<span style="color: ${colors[type]};">${message}</span>\n`;
+      consoleDiv.scrollTop = consoleDiv.scrollHeight;
+    }
+
+    function runTests() {
+      consoleDiv.innerHTML = '';
+      log('========================================');
+      log('UI Layout Tests - Starting');
+      log('========================================\n');
+
+      const iframe = document.getElementById('testFrame');
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+      const results = {
+        total: 0,
+        passed: 0,
+        failed: 0
+      };
+
+      function assert(condition, message) {
+        results.total++;
+        if (condition) {
+          results.passed++;
+          log(`✓ PASS: ${message}`);
+        } else {
+          results.failed++;
+          log(`✗ FAIL: ${message}`, 'error');
+        }
+      }
+
+      function assertEqual(actual, expected, message) {
+        if (actual !== expected) {
+          log(`  Expected: ${expected}, Got: ${actual}`, 'error');
+        }
+        assert(actual === expected, message);
+      }
+
+      // Test 1: Scientific panel exists
+      log('\n--- Test: Scientific Panel Exists ---');
+      const panel = doc.getElementById('panel-scientific');
+      assert(panel !== null, 'Scientific panel element exists');
+      if (panel) {
+        assert(panel.classList.contains('calculator__panel'), 'Has calculator__panel class');
+      }
+
+      // Test 2: 7-column grid
+      log('\n--- Test: Scientific Grid Layout ---');
+      const buttonsContainer = doc.querySelector('#panel-scientific .calculator__buttons');
+      assert(buttonsContainer !== null, 'Scientific buttons container exists');
+      if (buttonsContainer) {
+        assert(
+          buttonsContainer.classList.contains('calculator__buttons--scientific'),
+          'Has calculator__buttons--scientific class for 7-column grid'
+        );
+      }
+
+      // Test 3: Button count
+      log('\n--- Test: Scientific Button Count ---');
+      if (panel) {
+        const buttons = panel.querySelectorAll('.calculator__button');
+        const spacers = panel.querySelectorAll('.calculator__spacer');
+        assertEqual(buttons.length, 42, `Button count: expected 42, got ${buttons.length}`);
+        assertEqual(spacers.length, 14, `Spacer count: expected 14, got ${spacers.length}`);
+      }
+
+      // Test 4: Number buttons
+      log('\n--- Test: Number Button Positions ---');
+      if (panel) {
+        for (let i = 0; i <= 9; i++) {
+          const btn = panel.querySelector(`[data-number="${i}"]`);
+          assert(btn !== null, `Number button ${i} exists in scientific panel`);
+        }
+      }
+
+      // Test 5: Function buttons
+      log('\n--- Test: Function Buttons Exist ---');
+      if (panel) {
+        const functions = ['sin', 'cos', 'tan', 'asin', 'acos', 'atan',
+                           'log', 'ln', 'exp', 'pow10', 'sqrt', 'cbrt',
+                           'square', 'cube', 'factorial', 'reciprocal', 'abs',
+                           'pi', 'e'];
+        functions.forEach(func => {
+          const btn = panel.querySelector(`[data-function="${func}"]`);
+          assert(btn !== null, `Function button '${func}' exists`);
+        });
+      }
+
+      // Test 6: Operator buttons
+      log('\n--- Test: Operator Buttons in Scientific Mode ---');
+      if (panel) {
+        const operators = ['÷', '×', '-', '+', '^'];
+        operators.forEach(op => {
+          const btn = panel.querySelector(`[data-operator="${op}"]`);
+          assert(btn !== null, `Operator button '${op}' exists`);
+        });
+      }
+
+      // Test 7: Angle mode selector
+      log('\n--- Test: Angle Mode Selector ---');
+      const degRadio = doc.getElementById('radio-deg');
+      const radRadio = doc.getElementById('radio-rad');
+      assert(degRadio !== null, 'DEG radio button exists');
+      assert(radRadio !== null, 'RAD radio button exists');
+      if (degRadio) {
+        assert(degRadio.checked === true, 'DEG is default selected');
+      }
+
+      // Test 8: Clear button
+      log('\n--- Test: Clear Button ---');
+      if (panel) {
+        const clearBtn = panel.querySelector('[data-action="clear"]');
+        assert(clearBtn !== null, 'Clear button exists');
+        if (clearBtn) {
+          assertEqual(clearBtn.textContent.trim(), 'AC', 'Clear button shows AC');
+        }
+      }
+
+      // Test 9: Parentheses
+      log('\n--- Test: Parentheses Buttons ---');
+      if (panel) {
+        const lparenBtn = panel.querySelector('[data-value="("]');
+        const rparenBtn = panel.querySelector('[data-value=")"]');
+        assert(lparenBtn !== null, 'Left parenthesis button exists');
+        assert(rparenBtn !== null, 'Right parenthesis button exists');
+      }
+
+      // Test 10: Layout structure - Numbers not in function rows
+      log('\n--- Test: Layout Structure ---');
+      if (panel) {
+        const allElements = panel.querySelectorAll('.calculator__buttons--scientific > *');
+        // First 28 elements should be function/operator buttons (rows 1-4 = 7*4)
+        // Elements 28-55 should be numbers, spacers, and operators (rows 5-8)
+        let numbersInFunctionRows = 0;
+        for (let i = 0; i < 28 && i < allElements.length; i++) {
+          if (allElements[i].dataset && allElements[i].dataset.number !== undefined) {
+            numbersInFunctionRows++;
+          }
+        }
+        assertEqual(numbersInFunctionRows, 0, 'No number buttons in function rows (1-4)');
+      }
+
+      // Summary
+      log('\n========================================');
+      log('UI Test Summary');
+      log('========================================');
+      log(`Total:  ${results.total}`);
+      log(`Passed: ${results.passed} ✓`);
+      log(`Failed: ${results.failed} ✗`);
+      const passRate = ((results.passed / results.total) * 100).toFixed(2);
+      log(`Pass Rate: ${passRate}%`);
+      log('========================================\n');
+
+      // Update stats display
+      statsDiv.innerHTML = `
+        <span class="stat total">総テスト数: ${results.total}</span>
+        <span class="stat pass">成功: ${results.passed}</span>
+        <span class="stat fail">失敗: ${results.failed}</span>
+        <span class="stat">成功率: ${passRate}%</span>
+      `;
+
+      if (results.failed === 0) {
+        statsDiv.innerHTML += '<p style="color: #4caf50; font-weight: bold; margin-top: 10px;">✓ すべてのテストがパスしました！</p>';
+      } else {
+        statsDiv.innerHTML += '<p style="color: #f44336; font-weight: bold; margin-top: 10px;">✗ 一部のテストが失敗しました</p>';
+      }
+
+      return results;
+    }
+
+    // Auto-run tests after iframe loads
+    document.getElementById('testFrame').onload = function() {
+      setTimeout(runTests, 500);
+    };
+  </script>
+</body>
+</html>

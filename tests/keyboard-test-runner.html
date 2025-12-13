@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyboard Handler Tests</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Consolas', 'Monaco', monospace;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      color: #569cd6;
+      border-bottom: 1px solid #3c3c3c;
+      padding-bottom: 10px;
+    }
+    .test-output {
+      background-color: #252526;
+      border: 1px solid #3c3c3c;
+      border-radius: 4px;
+      padding: 15px;
+      margin: 10px 0;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .test-pass {
+      color: #4ec9b0;
+    }
+    .test-fail {
+      color: #f14c4c;
+    }
+    .test-group {
+      margin: 10px 0;
+      padding-left: 20px;
+      border-left: 2px solid #3c3c3c;
+    }
+    .test-group-title {
+      color: #dcdcaa;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+    .summary {
+      background-color: #2d2d30;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+    .summary-passed {
+      color: #4ec9b0;
+      font-size: 1.2em;
+    }
+    .summary-failed {
+      color: #f14c4c;
+      font-size: 1.2em;
+    }
+    .keyboard-test-area {
+      background-color: #2d2d30;
+      padding: 20px;
+      border-radius: 4px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .keyboard-test-area input {
+      background-color: #3c3c3c;
+      border: 1px solid #569cd6;
+      color: #d4d4d4;
+      padding: 10px 20px;
+      font-size: 1.5em;
+      text-align: center;
+      width: 200px;
+      border-radius: 4px;
+    }
+    .key-pressed {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #808080;
+    }
+  </style>
+</head>
+<body>
+  <h1>KeyboardHandler Unit Tests</h1>
+
+  <div id="test-output" class="test-output">
+    <p>Loading tests...</p>
+  </div>
+
+  <div class="summary" id="summary">
+    <p>Running tests...</p>
+  </div>
+
+  <div class="keyboard-test-area">
+    <h3>Keyboard Input Test Area</h3>
+    <p>Click below and press keys to test keyboard handling:</p>
+    <input type="text" id="test-input" readonly placeholder="Press a key">
+    <div class="key-pressed" id="key-info"></div>
+  </div>
+
+  <!-- Load calculator modules first -->
+  <script src="../src/js/keyboard.js"></script>
+
+  <script>
+    // Custom console to capture output
+    const outputDiv = document.getElementById('test-output');
+    const summaryDiv = document.getElementById('summary');
+    let outputHtml = '';
+    let currentGroup = null;
+
+    const originalConsole = {
+      log: console.log,
+      error: console.error,
+      group: console.group,
+      groupEnd: console.groupEnd
+    };
+
+    console.group = function(text) {
+      outputHtml += '<div class="test-group"><div class="test-group-title">' + text + '</div>';
+      originalConsole.group(text);
+    };
+
+    console.groupEnd = function() {
+      outputHtml += '</div>';
+      originalConsole.groupEnd();
+    };
+
+    console.log = function(text) {
+      if (text.startsWith('✓')) {
+        outputHtml += '<div class="test-pass">' + text + '</div>';
+      } else if (text.startsWith('===')) {
+        outputHtml += '<div style="color: #569cd6; font-weight: bold; margin-top: 10px;">' + text + '</div>';
+      } else {
+        outputHtml += '<div>' + text + '</div>';
+      }
+      originalConsole.log(text);
+    };
+
+    console.error = function(text) {
+      outputHtml += '<div class="test-fail">' + text + '</div>';
+      originalConsole.error(text);
+    };
+
+    // Test results container
+    const testResults = {
+      passed: 0,
+      failed: 0,
+      tests: []
+    };
+
+    function describe(description, fn) {
+      console.group(description);
+      fn();
+      console.groupEnd();
+    }
+
+    function it(description, fn) {
+      try {
+        fn();
+        testResults.passed++;
+        testResults.tests.push({ description, status: 'passed' });
+        console.log('✓ ' + description);
+      } catch (error) {
+        testResults.failed++;
+        testResults.tests.push({ description, status: 'failed', error: error.message });
+        console.error('✗ ' + description + ': ' + error.message);
+      }
+    }
+
+    function expect(actual) {
+      return {
+        toBe: function(expected) {
+          if (actual !== expected) {
+            throw new Error('Expected ' + expected + ' but got ' + actual);
+          }
+        },
+        toEqual: function(expected) {
+          if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+            throw new Error('Expected ' + JSON.stringify(expected) + ' but got ' + JSON.stringify(actual));
+          }
+        },
+        toBeTruthy: function() {
+          if (!actual) {
+            throw new Error('Expected truthy value but got ' + actual);
+          }
+        },
+        toBeFalsy: function() {
+          if (actual) {
+            throw new Error('Expected falsy value but got ' + actual);
+          }
+        },
+        toBeNull: function() {
+          if (actual !== null) {
+            throw new Error('Expected null but got ' + actual);
+          }
+        }
+      };
+    }
+
+    function runTests() {
+      console.log('=== KeyboardHandler Unit Tests ===');
+
+      describe('KeyboardHandler Module', function() {
+
+        describe('Initialization', function() {
+          it('should have init method', function() {
+            expect(typeof KeyboardHandler.init).toBe('function');
+          });
+
+          it('should have enable method', function() {
+            expect(typeof KeyboardHandler.enable).toBe('function');
+          });
+
+          it('should have disable method', function() {
+            expect(typeof KeyboardHandler.disable).toBe('function');
+          });
+
+          it('should have setMode method', function() {
+            expect(typeof KeyboardHandler.setMode).toBe('function');
+          });
+
+          it('should have getState method', function() {
+            expect(typeof KeyboardHandler.getState).toBe('function');
+          });
+
+          it('should initialize successfully', function() {
+            const result = KeyboardHandler.init();
+            expect(result === true || result === undefined).toBeTruthy();
+          });
+        });
+
+        describe('State Management', function() {
+          it('should return current state', function() {
+            const state = KeyboardHandler.getState();
+            expect(state).toBeTruthy();
+            expect(typeof state.isEnabled).toBe('boolean');
+            expect(typeof state.currentMode).toBe('string');
+          });
+
+          it('should enable keyboard input', function() {
+            KeyboardHandler.enable();
+            const state = KeyboardHandler.getState();
+            expect(state.isEnabled).toBe(true);
+          });
+
+          it('should disable keyboard input', function() {
+            KeyboardHandler.disable();
+            const state = KeyboardHandler.getState();
+            expect(state.isEnabled).toBe(false);
+            KeyboardHandler.enable();
+          });
+
+          it('should set mode to standard', function() {
+            KeyboardHandler.setMode('standard');
+            const state = KeyboardHandler.getState();
+            expect(state.currentMode).toBe('standard');
+          });
+
+          it('should set mode to programmer', function() {
+            KeyboardHandler.setMode('programmer');
+            const state = KeyboardHandler.getState();
+            expect(state.currentMode).toBe('programmer');
+          });
+
+          it('should ignore invalid mode', function() {
+            KeyboardHandler.setMode('standard');
+            KeyboardHandler.setMode('invalid');
+            const state = KeyboardHandler.getState();
+            expect(state.currentMode).toBe('standard');
+          });
+        });
+
+        describe('Key Mapping', function() {
+          it('should map number keys', function() {
+            const mapping = KeyboardHandler._test.getKeyMapping('5', 'standard');
+            expect(mapping).toBeTruthy();
+            expect(mapping.action).toBe('number');
+            expect(mapping.value).toBe('5');
+          });
+
+          it('should map operator keys', function() {
+            const plus = KeyboardHandler._test.getKeyMapping('+', 'standard');
+            expect(plus.action).toBe('operator');
+
+            const minus = KeyboardHandler._test.getKeyMapping('-', 'standard');
+            expect(minus.action).toBe('operator');
+          });
+
+          it('should map Enter to equals', function() {
+            const mapping = KeyboardHandler._test.getKeyMapping('Enter', 'standard');
+            expect(mapping.action).toBe('equals');
+          });
+
+          it('should map Escape to clear', function() {
+            const mapping = KeyboardHandler._test.getKeyMapping('Escape', 'standard');
+            expect(mapping.action).toBe('clear');
+          });
+
+          it('should map Backspace', function() {
+            const mapping = KeyboardHandler._test.getKeyMapping('Backspace', 'standard');
+            expect(mapping.action).toBe('backspace');
+          });
+
+          it('should map decimal point', function() {
+            const dot = KeyboardHandler._test.getKeyMapping('.', 'standard');
+            expect(dot.action).toBe('decimal');
+          });
+
+          it('should return null for unmapped keys', function() {
+            const mapping = KeyboardHandler._test.getKeyMapping('x', 'standard');
+            expect(mapping).toBeNull();
+          });
+        });
+
+        describe('Programmer Mode', function() {
+          it('should map hex digits in programmer mode', function() {
+            const mapping = KeyboardHandler._test.getKeyMapping('a', 'programmer');
+            expect(mapping).toBeTruthy();
+            expect(mapping.action).toBe('hex');
+            expect(mapping.value).toBe('A');
+          });
+
+          it('should map bitwise AND', function() {
+            const mapping = KeyboardHandler._test.getKeyMapping('&', 'programmer');
+            expect(mapping.action).toBe('bitwise');
+            expect(mapping.value).toBe('AND');
+          });
+
+          it('should not map hex in standard mode', function() {
+            const mapping = KeyboardHandler._test.getKeyMapping('a', 'standard');
+            expect(mapping).toBeNull();
+          });
+        });
+
+        describe('Base Validation', function() {
+          it('should validate binary digits', function() {
+            expect(KeyboardHandler._test.isValidForBase('0', 2)).toBe(true);
+            expect(KeyboardHandler._test.isValidForBase('1', 2)).toBe(true);
+            expect(KeyboardHandler._test.isValidForBase('2', 2)).toBe(false);
+          });
+
+          it('should validate octal digits', function() {
+            expect(KeyboardHandler._test.isValidForBase('7', 8)).toBe(true);
+            expect(KeyboardHandler._test.isValidForBase('8', 8)).toBe(false);
+          });
+
+          it('should validate hex digits', function() {
+            expect(KeyboardHandler._test.isValidForBase('A', 16)).toBe(true);
+            expect(KeyboardHandler._test.isValidForBase('A', 10)).toBe(false);
+          });
+        });
+
+        describe('Input Element Detection', function() {
+          it('should detect input elements', function() {
+            const input = document.createElement('input');
+            expect(KeyboardHandler._test.isInputElement(input)).toBe(true);
+          });
+
+          it('should detect textarea', function() {
+            const textarea = document.createElement('textarea');
+            expect(KeyboardHandler._test.isInputElement(textarea)).toBe(true);
+          });
+
+          it('should return false for div', function() {
+            const div = document.createElement('div');
+            expect(KeyboardHandler._test.isInputElement(div)).toBe(false);
+          });
+
+          it('should handle null', function() {
+            expect(KeyboardHandler._test.isInputElement(null)).toBe(false);
+          });
+        });
+
+      });
+
+      // Update output
+      outputDiv.innerHTML = outputHtml;
+
+      // Update summary
+      const total = testResults.passed + testResults.failed;
+      const passRate = total > 0 ? Math.round((testResults.passed / total) * 100) : 0;
+
+      summaryDiv.innerHTML =
+        '<span class="summary-passed">Passed: ' + testResults.passed + '</span> | ' +
+        '<span class="summary-failed">Failed: ' + testResults.failed + '</span> | ' +
+        'Total: ' + total + ' | ' +
+        'Pass Rate: ' + passRate + '%';
+
+      return testResults;
+    }
+
+    // Keyboard test area
+    const testInput = document.getElementById('test-input');
+    const keyInfo = document.getElementById('key-info');
+
+    document.addEventListener('keydown', function(event) {
+      keyInfo.textContent = 'Key: ' + event.key + ' | Code: ' + event.code +
+        ' | Ctrl: ' + event.ctrlKey + ' | Alt: ' + event.altKey + ' | Shift: ' + event.shiftKey;
+    });
+
+    // Run tests on load
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(runTests, 100);
+    });
+  </script>
+</body>
+</html>

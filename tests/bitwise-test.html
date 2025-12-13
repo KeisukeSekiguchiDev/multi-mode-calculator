@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitwise Operations Test</title>
+  <style>
+    body {
+      font-family: 'Consolas', 'Monaco', monospace;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      color: #4ec9b0;
+      border-bottom: 2px solid #4ec9b0;
+      padding-bottom: 10px;
+    }
+
+    #output {
+      background-color: #252526;
+      border: 1px solid #3e3e42;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .pass {
+      color: #4ec9b0;
+    }
+
+    .fail {
+      color: #f48771;
+    }
+
+    .summary {
+      color: #569cd6;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bitwise Operations Unit Tests</h1>
+  <div id="output">Loading tests...</div>
+
+  <!-- Load Calculator Module -->
+  <script src="../src/js/calculator.js"></script>
+
+  <!-- Load Test Suite -->
+  <script src="bitwise.test.js"></script>
+
+  <script>
+    // Redirect console output to page
+    const outputDiv = document.getElementById('output');
+    const originalLog = console.log;
+    const originalError = console.error;
+
+    console.log = function(...args) {
+      const message = args.join(' ');
+      const line = document.createElement('div');
+
+      if (message.includes('✓ PASS')) {
+        line.className = 'pass';
+      } else if (message.includes('✗ FAIL')) {
+        line.className = 'fail';
+      } else if (message.includes('Test Summary') || message.includes('Total:') ||
+                 message.includes('Passed:') || message.includes('Failed:') ||
+                 message.includes('Pass Rate:')) {
+        line.className = 'summary';
+      }
+
+      line.textContent = message;
+      outputDiv.appendChild(line);
+      originalLog.apply(console, args);
+    };
+
+    console.error = function(...args) {
+      const message = args.join(' ');
+      const line = document.createElement('div');
+      line.className = 'fail';
+      line.textContent = message;
+      outputDiv.appendChild(line);
+      originalError.apply(console, args);
+    };
+
+    // Clear initial message
+    outputDiv.innerHTML = '';
+  </script>
+</body>
+</html>

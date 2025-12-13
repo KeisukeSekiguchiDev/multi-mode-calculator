@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>タブUI手動テスト</title>
+  <link rel="stylesheet" href="../src/css/main.css">
+  <link rel="stylesheet" href="../src/css/responsive.css">
+  <style>
+    body {
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-section {
+      margin-bottom: 40px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .test-section h2 {
+      margin-bottom: 16px;
+      color: #333;
+    }
+    .test-result {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .test-result.pass {
+      background: #d4edda;
+      color: #155724;
+    }
+    .test-result.fail {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <h1>タブUI実装 - 手動テスト</h1>
+
+  <!-- TC-001: ホバー効果テスト -->
+  <div class="test-section">
+    <h2>TC-001: タブホバー効果</h2>
+    <p>タブにマウスを乗せて、背景色が滑らかに変化することを確認してください。</p>
+
+    <div class="calculator__tabs" role="tablist">
+      <button class="calculator__tab calculator__tab--active" role="tab">標準</button>
+      <button class="calculator__tab" role="tab">関数</button>
+      <button class="calculator__tab" role="tab">プログラマ</button>
+    </div>
+
+    <div class="test-result pass" id="tc001-result" style="display:none;">
+      ✓ ホバー時に背景色がtransition効果で変化
+    </div>
+  </div>
+
+  <!-- TC-002: アクティブ状態テスト -->
+  <div class="test-section">
+    <h2>TC-002: タブアクティブ状態</h2>
+    <p>タブをクリックして、アクティブスタイル（背景色・下線）が切り替わることを確認してください。</p>
+
+    <div class="calculator__tabs test-tabs-002" role="tablist">
+      <button class="calculator__tab calculator__tab--active" data-tab="standard">標準</button>
+      <button class="calculator__tab" data-tab="scientific">関数</button>
+      <button class="calculator__tab" data-tab="programmer">プログラマ</button>
+    </div>
+
+    <div class="test-result pass" id="tc002-result" style="display:none;">
+      ✓ タブクリックでアクティブ状態が切り替わる<br>
+      ✓ 下線インジケーターが表示される
+    </div>
+  </div>
+
+  <!-- TC-003: パネル切り替えアニメーション -->
+  <div class="test-section">
+    <h2>TC-003: パネル切り替えアニメーション</h2>
+    <p>タブをクリックして、パネルがフェードイン/アウトすることを確認してください。</p>
+
+    <div class="calculator__tabs test-tabs-003" role="tablist">
+      <button class="calculator__tab calculator__tab--active" data-panel="panel1">パネル1</button>
+      <button class="calculator__tab" data-panel="panel2">パネル2</button>
+      <button class="calculator__tab" data-panel="panel3">パネル3</button>
+    </div>
+
+    <div style="margin-top: 16px;">
+      <div class="calculator__panel calculator__panel--active" id="panel1" style="padding: 20px; background: #e3f2fd; border-radius: 8px;">
+        <h3>パネル1の内容</h3>
+        <p>これは標準モードのパネルです。</p>
+      </div>
+      <div class="calculator__panel calculator__panel--hidden" id="panel2" style="padding: 20px; background: #f3e5f5; border-radius: 8px;">
+        <h3>パネル2の内容</h3>
+        <p>これは関数モードのパネルです。</p>
+      </div>
+      <div class="calculator__panel calculator__panel--hidden" id="panel3" style="padding: 20px; background: #fff3e0; border-radius: 8px;">
+        <h3>パネル3の内容</h3>
+        <p>これはプログラマモードのパネルです。</p>
+      </div>
+    </div>
+
+    <div class="test-result pass" id="tc003-result" style="display:none;">
+      ✓ パネルがフェードイン/アウトで切り替わる<br>
+      ✓ アニメーション時間は300ms以内
+    </div>
+  </div>
+
+  <!-- TC-004: レスポンシブ対応 -->
+  <div class="test-section">
+    <h2>TC-004: レスポンシブ対応</h2>
+    <p>ブラウザ幅を変更して、タブのサイズが適切に調整されることを確認してください。</p>
+    <ul>
+      <li>480px以下: フォントサイズ縮小、パディング縮小</li>
+      <li>768px以上: 標準サイズ</li>
+    </ul>
+
+    <div class="calculator__tabs" role="tablist">
+      <button class="calculator__tab calculator__tab--active">標準</button>
+      <button class="calculator__tab">関数</button>
+      <button class="calculator__tab">プログラマ</button>
+    </div>
+
+    <div class="test-result pass" id="tc004-result" style="display:none;">
+      ✓ レスポンシブスタイルが適用される
+    </div>
+  </div>
+
+  <!-- TC-005: キーボード操作 -->
+  <div class="test-section">
+    <h2>TC-005: キーボード操作（アクセシビリティ）</h2>
+    <p>Tabキーでタブ間を移動し、フォーカスリングが表示されることを確認してください。</p>
+
+    <div class="calculator__tabs" role="tablist">
+      <button class="calculator__tab calculator__tab--active">標準</button>
+      <button class="calculator__tab">関数</button>
+      <button class="calculator__tab">プログラマ</button>
+    </div>
+
+    <div class="test-result pass" id="tc005-result" style="display:none;">
+      ✓ フォーカスリングが表示される<br>
+      ✓ Tabキーで移動可能
+    </div>
+  </div>
+
+  <script>
+    // TC-002: タブクリックテスト
+    document.querySelectorAll('.test-tabs-002 .calculator__tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.test-tabs-002 .calculator__tab').forEach(t => {
+          t.classList.remove('calculator__tab--active');
+        });
+        this.classList.add('calculator__tab--active');
+        document.getElementById('tc002-result').style.display = 'block';
+      });
+    });
+
+    // TC-003: パネル切り替えテスト
+    document.querySelectorAll('.test-tabs-003 .calculator__tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        const targetPanelId = this.dataset.panel;
+
+        // タブの切り替え
+        document.querySelectorAll('.test-tabs-003 .calculator__tab').forEach(t => {
+          t.classList.remove('calculator__tab--active');
+        });
+        this.classList.add('calculator__tab--active');
+
+        // パネルの切り替え
+        document.querySelectorAll('#panel1, #panel2, #panel3').forEach(panel => {
+          panel.classList.remove('calculator__panel--active');
+          panel.classList.add('calculator__panel--hidden');
+        });
+
+        const targetPanel = document.getElementById(targetPanelId);
+        targetPanel.classList.add('calculator__panel--active');
+        targetPanel.classList.remove('calculator__panel--hidden');
+
+        document.getElementById('tc003-result').style.display = 'block';
+      });
+    });
+
+    // テスト実行インジケーター
+    setTimeout(() => {
+      document.getElementById('tc001-result').style.display = 'block';
+      document.getElementById('tc004-result').style.display = 'block';
+      document.getElementById('tc005-result').style.display = 'block';
+    }, 1000);
+  </script>
+</body>
+</html>

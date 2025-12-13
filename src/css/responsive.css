@@ -1,0 +1,188 @@
+/* ========================================
+   Multi-Mode Calculator - Responsive Styles
+   ======================================== */
+
+/* Tablet - 768px and above */
+@media screen and (min-width: 768px) {
+  .calculator {
+    max-width: 450px;
+  }
+
+  :root {
+    --button-size: 80px;
+    --button-gap: 10px;
+    --font-size-xxl: 56px;
+  }
+
+  /* History Panel - Tablet */
+  .calculator__history {
+    width: 350px;
+  }
+
+  /* Settings Dialog - Tablet */
+  .calculator__dialog-content {
+    width: 500px;
+    max-width: 90%;
+  }
+}
+
+/* Desktop - 1200px and above */
+@media screen and (min-width: 1200px) {
+  .calculator {
+    max-width: 500px;
+  }
+
+  :root {
+    --button-size: 90px;
+    --button-gap: 12px;
+    --font-size-xxl: 64px;
+  }
+}
+
+/* Mobile - 480px and below */
+@media screen and (max-width: 480px) {
+  body {
+    padding: var(--spacing-sm);
+  }
+
+  .calculator {
+    max-width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  :root {
+    --button-size: 60px;
+    --button-gap: 6px;
+    --font-size-xxl: 40px;
+    --font-size-lg: 18px;
+    --font-size-md: 14px;
+    --spacing-lg: 12px;
+  }
+
+  .calculator__tab {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  /* タブインジケーター調整 */
+  .calculator__tab--active::after {
+    height: 2px;
+  }
+
+  .calculator__control {
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-md);
+  }
+
+  .calculator__display {
+    padding: var(--spacing-md);
+    min-height: 100px;
+  }
+
+  .calculator__expression {
+    font-size: var(--font-size-sm);
+  }
+
+  .calculator__button {
+    font-size: var(--font-size-md);
+    padding: var(--spacing-xs);
+  }
+
+  .calculator__button--function {
+    font-size: var(--font-size-sm);
+  }
+
+  /* History Panel - Mobile */
+  .calculator__history {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .calculator__history-header h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Settings Dialog - Mobile */
+  .calculator__dialog-content {
+    width: 95%;
+    max-width: 95%;
+    margin: var(--spacing-md);
+  }
+
+  .calculator__dialog-header h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .calculator__settings-section h3 {
+    font-size: var(--font-size-md);
+  }
+
+  .calculator__select,
+  .calculator__button--primary,
+  .calculator__button--secondary {
+    font-size: var(--font-size-md);
+  }
+}
+
+/* Very small screens - 360px and below */
+@media screen and (max-width: 360px) {
+  :root {
+    --button-size: 50px;
+    --button-gap: 4px;
+    --font-size-xxl: 32px;
+    --spacing-lg: 8px;
+  }
+
+  .calculator__header {
+    padding: var(--spacing-sm);
+  }
+
+  .calculator__main {
+    padding: var(--spacing-sm);
+  }
+
+  .calculator__button--function {
+    font-size: 11px;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media screen and (max-height: 600px) and (orientation: landscape) {
+  body {
+    padding: var(--spacing-xs);
+  }
+
+  .calculator__header {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .calculator__main {
+    padding: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+  }
+
+  .calculator__display {
+    min-height: 80px;
+    padding: var(--spacing-sm);
+  }
+
+  :root {
+    --button-size: 50px;
+    --font-size-xxl: 32px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .calculator__header,
+  .calculator__controls,
+  .calculator__tabs {
+    display: none;
+  }
+
+  .calculator {
+    box-shadow: none;
+    max-width: 100%;
+  }
+}

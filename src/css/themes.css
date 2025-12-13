@@ -1,0 +1,276 @@
+/* ========================================
+   Multi-Mode Calculator - Theme Styles
+   ======================================== */
+
+/* Dark Mode */
+body[data-theme="dark"] {
+  --color-bg-primary: #1a1a1a;
+  --color-bg-secondary: #2d2d2d;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a0a0a0;
+  --color-border: #404040;
+
+  --color-btn-number: #3a3a3a;
+  --color-btn-number-text: #ffffff;
+  --color-btn-operator: #505050;
+  --color-btn-operator-text: #ff9500;
+  --color-btn-function: #404040;
+  --color-btn-function-text: #ffffff;
+  --color-btn-equals: #ff9500;
+  --color-btn-equals-text: #ffffff;
+
+  --color-display-bg: #1a1a1a;
+  --color-display-text: #ffffff;
+  --color-expression-text: #808080;
+}
+
+/* Theme: Ocean */
+body[data-theme="ocean"] {
+  --color-bg-primary: #e3f2fd;
+  --color-bg-secondary: #ffffff;
+  --color-text-primary: #0d47a1;
+  --color-text-secondary: #1976d2;
+
+  --color-btn-number: #ffffff;
+  --color-btn-number-text: #0d47a1;
+  --color-btn-operator: #e3f2fd;
+  --color-btn-operator-text: #1976d2;
+  --color-btn-equals: #1976d2;
+  --color-btn-equals-text: #ffffff;
+
+  --color-display-bg: #0d47a1;
+  --color-display-text: #ffffff;
+  --color-expression-text: #64b5f6;
+}
+
+/* Theme: Forest */
+body[data-theme="forest"] {
+  --color-bg-primary: #e8f5e9;
+  --color-bg-secondary: #ffffff;
+  --color-text-primary: #1b5e20;
+  --color-text-secondary: #388e3c;
+
+  --color-btn-number: #ffffff;
+  --color-btn-number-text: #1b5e20;
+  --color-btn-operator: #e8f5e9;
+  --color-btn-operator-text: #388e3c;
+  --color-btn-equals: #388e3c;
+  --color-btn-equals-text: #ffffff;
+
+  --color-display-bg: #1b5e20;
+  --color-display-text: #ffffff;
+  --color-expression-text: #81c784;
+}
+
+/* Theme: Sunset */
+body[data-theme="sunset"] {
+  --color-bg-primary: #fff3e0;
+  --color-bg-secondary: #ffffff;
+  --color-text-primary: #e65100;
+  --color-text-secondary: #f57c00;
+
+  --color-btn-number: #ffffff;
+  --color-btn-number-text: #e65100;
+  --color-btn-operator: #fff3e0;
+  --color-btn-operator-text: #f57c00;
+  --color-btn-equals: #f57c00;
+  --color-btn-equals-text: #ffffff;
+
+  --color-display-bg: #e65100;
+  --color-display-text: #ffffff;
+  --color-expression-text: #ffb74d;
+}
+
+/* Theme: Midnight */
+body[data-theme="midnight"] {
+  --color-bg-primary: #1a237e;
+  --color-bg-secondary: #283593;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #9fa8da;
+
+  --color-btn-number: #3949ab;
+  --color-btn-number-text: #ffffff;
+  --color-btn-operator: #5c6bc0;
+  --color-btn-operator-text: #ffffff;
+  --color-btn-equals: #7986cb;
+  --color-btn-equals-text: #ffffff;
+
+  --color-display-bg: #0d1656;
+  --color-display-text: #ffffff;
+  --color-expression-text: #9fa8da;
+}
+
+/* Theme: Cherry */
+body[data-theme="cherry"] {
+  --color-bg-primary: #fce4ec;
+  --color-bg-secondary: #ffffff;
+  --color-text-primary: #880e4f;
+  --color-text-secondary: #c2185b;
+
+  --color-btn-number: #ffffff;
+  --color-btn-number-text: #880e4f;
+  --color-btn-operator: #fce4ec;
+  --color-btn-operator-text: #c2185b;
+  --color-btn-equals: #c2185b;
+  --color-btn-equals-text: #ffffff;
+
+  --color-display-bg: #880e4f;
+  --color-display-text: #ffffff;
+  --color-expression-text: #f48fb1;
+}
+
+/* Theme: Pastel */
+body[data-theme="pastel"] {
+  --color-bg-primary: #fff5f7;
+  --color-bg-secondary: #ffe5ec;
+  --color-text-primary: #5d4e60;
+  --color-text-secondary: #a37f92;
+  --color-border: #f2b5d4;
+
+  --color-btn-number: #ffd6e8;
+  --color-btn-number-text: #5d4e60;
+  --color-btn-operator: #c9ada7;
+  --color-btn-operator-text: #ffffff;
+  --color-btn-function: #a8dadc;
+  --color-btn-function-text: #1d3557;
+  --color-btn-equals: #f2b5d4;
+  --color-btn-equals-text: #ffffff;
+
+  --color-display-bg: #f2b5d4;
+  --color-display-text: #5d4e60;
+  --color-expression-text: #a37f92;
+}
+
+/* Theme: Earth */
+body[data-theme="earth"] {
+  --color-bg-primary: #f4f1de;
+  --color-bg-secondary: #e8e3d6;
+  --color-text-primary: #3d405b;
+  --color-text-secondary: #6c757d;
+  --color-border: #81b29a;
+
+  --color-btn-number: #e8e3d6;
+  --color-btn-number-text: #3d405b;
+  --color-btn-operator: #81b29a;
+  --color-btn-operator-text: #ffffff;
+  --color-btn-function: #a8dadc;
+  --color-btn-function-text: #1d3557;
+  --color-btn-equals: #f2cc8f;
+  --color-btn-equals-text: #3d405b;
+
+  --color-display-bg: #3d405b;
+  --color-display-text: #f4f1de;
+  --color-expression-text: #81b29a;
+}
+
+/* Theme: Monochrome */
+body[data-theme="monochrome"] {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f5f5f5;
+  --color-text-primary: #000000;
+  --color-text-secondary: #6c757d;
+  --color-border: #757575;
+
+  --color-btn-number: #e0e0e0;
+  --color-btn-number-text: #000000;
+  --color-btn-operator: #757575;
+  --color-btn-operator-text: #ffffff;
+  --color-btn-function: #bdbdbd;
+  --color-btn-function-text: #000000;
+  --color-btn-equals: #424242;
+  --color-btn-equals-text: #ffffff;
+
+  --color-display-bg: #000000;
+  --color-display-text: #ffffff;
+  --color-expression-text: #757575;
+}
+
+/* Theme: Neon */
+body[data-theme="neon"] {
+  --color-bg-primary: #0a0e27;
+  --color-bg-secondary: #1a1e3a;
+  --color-text-primary: #00ffff;
+  --color-text-secondary: #ff00ff;
+  --color-border: #00ffff;
+
+  --color-btn-number: #1a1e3a;
+  --color-btn-number-text: #00ffff;
+  --color-btn-operator: #ff00ff;
+  --color-btn-operator-text: #ffffff;
+  --color-btn-function: #ffff00;
+  --color-btn-function-text: #000000;
+  --color-btn-equals: #00ff00;
+  --color-btn-equals-text: #000000;
+
+  --color-display-bg: #000000;
+  --color-display-text: #00ffff;
+  --color-expression-text: #ff00ff;
+}
+
+/* Neon glow effect */
+body[data-theme="neon"] .calculator__button {
+  box-shadow: 0 0 10px currentColor;
+  transition: box-shadow 0.3s ease;
+}
+
+body[data-theme="neon"] .calculator__button:hover {
+  box-shadow: 0 0 20px currentColor;
+}
+
+/* Theme: Wooden */
+body[data-theme="wooden"] {
+  --color-bg-primary: #d4a574;
+  --color-bg-secondary: #c19a6b;
+  --color-text-primary: #3e2723;
+  --color-text-secondary: #5d4037;
+  --color-border: #8d6e63;
+
+  --color-btn-number: #cdaa7d;
+  --color-btn-number-text: #3e2723;
+  --color-btn-operator: #8d6e63;
+  --color-btn-operator-text: #ffffff;
+  --color-btn-function: #a1887f;
+  --color-btn-function-text: #ffffff;
+  --color-btn-equals: #6d4c41;
+  --color-btn-equals-text: #ffffff;
+
+  --color-display-bg: #3e2723;
+  --color-display-text: #d4a574;
+  --color-expression-text: #8d6e63;
+}
+
+/* Theme: Glass */
+body[data-theme="glass"] {
+  --color-bg-primary: rgba(255, 255, 255, 0.1);
+  --color-bg-secondary: rgba(255, 255, 255, 0.05);
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+  --color-border: rgba(100, 181, 246, 0.5);
+
+  --color-btn-number: rgba(255, 255, 255, 0.15);
+  --color-btn-number-text: #ffffff;
+  --color-btn-operator: rgba(100, 181, 246, 0.3);
+  --color-btn-operator-text: #ffffff;
+  --color-btn-function: rgba(171, 71, 188, 0.3);
+  --color-btn-function-text: #ffffff;
+  --color-btn-equals: rgba(76, 175, 80, 0.3);
+  --color-btn-equals-text: #ffffff;
+
+  --color-display-bg: rgba(0, 0, 0, 0.3);
+  --color-display-text: #ffffff;
+  --color-expression-text: rgba(100, 181, 246, 0.7);
+}
+
+/* Glass effect */
+body[data-theme="glass"] .calculator__main {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+}
+
+body[data-theme="glass"] .calculator__button {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Additional themes can be added here for future sprints */
