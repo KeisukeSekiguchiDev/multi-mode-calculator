@@ -265,15 +265,7 @@ const HistoryManager = (function() {
     // Clear existing items
     listContainer.innerHTML = '';
 
-    if (history.length === 0) {
-      const emptyMessage = document.createElement('div');
-      emptyMessage.className = 'calculator__history-empty';
-      emptyMessage.textContent = '履歴がありません';
-      listContainer.appendChild(emptyMessage);
-      return;
-    }
-
-    // Render each history item
+    // Render each history item (empty state handled by HTML element)
     history.forEach(function(item, index) {
       const historyItem = createHistoryItemElement(item, index);
       listContainer.appendChild(historyItem);

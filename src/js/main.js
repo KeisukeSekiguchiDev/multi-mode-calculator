@@ -439,6 +439,8 @@
     if (historyClearBtn) {
       historyClearBtn.addEventListener('click', () => {
         HistoryManager.clearHistory();
+        HistoryManager.renderHistoryList();
+        updateEmptyState();
       });
     }
   }
@@ -471,6 +473,20 @@
 
     // Refresh history list
     HistoryManager.refreshPanel();
+    updateEmptyState();
+  }
+
+  /**
+   * Update empty state visibility based on history list
+   */
+  function updateEmptyState() {
+    const historyList = document.getElementById('history-list');
+    const emptyState = document.getElementById('history-empty');
+
+    if (!historyList || !emptyState) return;
+
+    const hasItems = historyList.children.length > 0;
+    emptyState.style.display = hasItems ? 'none' : 'flex';
   }
 
   /**

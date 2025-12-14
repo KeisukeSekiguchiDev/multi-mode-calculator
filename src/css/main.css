@@ -756,11 +756,6 @@ body.mode-programmer .calculator__main {
   font-size: var(--font-size-md);
 }
 
-/* Hide empty state when history has items */
-.calculator__history-list:not(:empty) + .calculator__history-empty {
-  display: none;
-}
-
 /* History Panel - Items */
 .calculator__history-item {
   position: relative;
