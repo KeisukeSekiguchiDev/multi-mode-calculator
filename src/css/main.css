@@ -733,10 +733,32 @@ body.mode-programmer .calculator__main {
 
 /* History Panel - Empty State */
 .calculator__history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   padding: var(--spacing-xl);
   color: var(--color-text-secondary);
   font-size: var(--font-size-md);
+  height: calc(100vh - 200px);
+}
+
+.calculator__history-empty-image {
+  width: 120px;
+  height: 120px;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.7;
+}
+
+.calculator__history-empty-text {
+  margin: 0;
+  font-size: var(--font-size-md);
+}
+
+/* Hide empty state when history has items */
+.calculator__history-list:not(:empty) + .calculator__history-empty {
+  display: none;
 }
 
 /* History Panel - Items */

@@ -7,6 +7,9 @@
   <meta name="author" content="Claude Code">
   <title>Multi-Mode Calculator</title>
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
   <!-- CSS -->
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/themes.css">
@@ -523,6 +526,10 @@
     </div>
     <div id="history-list" class="calculator__history-list" role="list" aria-label="履歴項目一覧">
       <!-- History items will be dynamically inserted here -->
+    </div>
+    <div id="history-empty" class="calculator__history-empty">
+      <img src="assets/images/empty-history.png" alt="履歴なし" class="calculator__history-empty-image">
+      <p class="calculator__history-empty-text">履歴がありません</p>
     </div>
     <div class="calculator__history-footer">
       <button id="btn-history-clear" class="calculator__button calculator__button--secondary" aria-label="すべてクリア">
